@@ -1,0 +1,25 @@
+# 生成文件（运行 rebuild.py 会重新生成）
+index.html
+题库.json
+
+*deploy.conf
+*pro.txt
+
+# Python 缓存
+__pycache__/
+*.pyc
+*.pyo
+
+# 临时文件
+_*.py
+_*.txt
+_*.js
+
+# 系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
