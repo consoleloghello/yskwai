@@ -1,7 +1,7 @@
 ### 题库网页 — 项目需求与计划
 
 **源文件**: `题库.txt`
-**目标**: 单页 HTML 应用 + Gitee Pages 部署
+**目标**: 单页 HTML 应用 + Github Pages 部署
 **更新日期**: 2026-06-15（已完成）
 
 ---
@@ -18,7 +18,7 @@
 | R6 | 单页应用 | 一个 `index.html` 包含全部功能 |
 | R7 | 简答题并列展示 | 答案直接跟在题目下方 |
 | R8 | 清爽现代风格 | 移动端优先设计，触控友好 |
-| R9 | Gitee Pages 部署 | `deploy.ps1` 一键推送 + 部署 |
+| R9 | Github Pages 部署 | `deploy.ps1` 一键推送 + 部署 |
 | R10 | 顶部搜索 | 输入关键词快速搜索匹配的题目 |
 
 ---
@@ -45,10 +45,10 @@
 
 1. 在 `deploy.conf` 中配置（或创建该文件）:
 ```
-REMOTE=git@gitee.com:你的用户名/仓库名.git
+REMOTE=git@github.com:你的用户名/仓库名.git
 BRANCH=master
 ```
 2. 运行 `.\deploy.ps1`
-3. 在 Gitee 仓库 Settings > Gitee Pages 启用服务
+3. 在 Github 仓库 Settings > Github Pages 启用服务
 
-也可直接传参: `.\deploy.ps1 -Remote "git@gitee.com:user/repo.git"`
+也可直接传参: `.\deploy.ps1 -Remote "git@github.com:user/repo.git"`

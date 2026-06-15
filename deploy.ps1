@@ -59,7 +59,7 @@ if ($currentRemote) {
 
 # 5. Pull latest to avoid conflicts
 Write-Host "> git pull --rebase origin $Branch" -ForegroundColor Cyan
-git pull --rebase origin $Branch 2>$null
+try { git pull --rebase origin $Branch 2>$null } catch {}
 
 # 6. Add files
 Write-Host "> git add index.html" -ForegroundColor Cyan
@@ -82,3 +82,4 @@ git push origin $Branch
 Write-Host ""
 Write-Host "Deploy done!" -ForegroundColor Green
 Write-Host "GitHub Pages will auto-deploy from branch: $Branch" -ForegroundColor Yellow
+
