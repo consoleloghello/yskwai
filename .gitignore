@@ -1,5 +1,6 @@
 # 生成文件（运行 rebuild.py 会重新生成）
-index.html
+
+# index.html
 题库.json
 
 *deploy.conf
