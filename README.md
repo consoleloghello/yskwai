@@ -55,13 +55,13 @@ python rebuild.py
 2. 修改 `deploy.conf`，填入你的仓库地址:
 ```
 REMOTE=git@github.com:你的用户名/仓库名.git
-BRANCH=main
+BRANCH=master
 ```
 3. 推送:
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\deploy.ps1
 ```
-4. 在 GitHub 仓库 → Settings → Pages → Source 选 `main` 分支 → Save
+4. 在 GitHub 仓库 → Settings → Pages → Source 选 `master` 分支 → Save
 5. 等待 1-2 分钟，访问 `git@github.com:你的用户名/仓库名.git/`
 
 **后续更新**：修改 `题库.txt` → `python rebuild.py` → 运行 `deploy.ps1` 即可。
