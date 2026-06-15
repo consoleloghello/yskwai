@@ -51,7 +51,7 @@ python rebuild.py
 ## 部署到 GitHub Pages
 
 **首次部署**：
-1. 在 GitHub 创建新仓库（如 `ysk-tiku`）
+1. 在 GitHub 创建新仓库（如 `yskwai`）
 2. 修改 `deploy.conf`，填入你的仓库地址:
 ```
 REMOTE=git@github.com:你的用户名/仓库名.git
