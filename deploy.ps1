@@ -1,7 +1,7 @@
-# deploy.ps1 - One-click deploy to Gitee Pages
+# deploy.ps1 - One-click deploy to GitHub Pages
 # Usage:
 #   powershell -ExecutionPolicy Bypass -File deploy.ps1
-#   powershell -ExecutionPolicy Bypass -File deploy.ps1 -Remote "git@gitee.com:user/repo.git" -Branch master
+#   powershell -ExecutionPolicy Bypass -File deploy.ps1 -Remote "git@github.com:user/repo.git"
 
 param(
     [string]$Remote = "",
@@ -31,7 +31,7 @@ if (-not $Remote) {
 # 2. Validate
 if (-not $Remote) {
     Write-Host "ERROR: Remote URL not set." -ForegroundColor Red
-    Write-Host "  Option 1: .\deploy.ps1 -Remote 'git@gitee.com:username/repo.git'"
+    Write-Host "  Option 1: .\deploy.ps1 -Remote 'git@github.com:username/repo.git'"
     Write-Host "  Option 2: Set REMOTE=... in deploy.conf"
     exit 1
 }
@@ -41,6 +41,8 @@ $gitDir = Join-Path $scriptDir ".git"
 if (-not (Test-Path $gitDir)) {
     Write-Host "> git init" -ForegroundColor Cyan
     git init
+    Write-Host "> git branch -M $Branch" -ForegroundColor Cyan
+    git branch -M $Branch
 }
 
 # 4. Configure remote
@@ -55,11 +57,15 @@ if ($currentRemote) {
     git remote add origin $Remote
 }
 
-# 5. Add files
+# 5. Pull latest to avoid conflicts
+Write-Host "> git pull --rebase origin $Branch" -ForegroundColor Cyan
+git pull --rebase origin $Branch 2>$null
+
+# 6. Add files
 Write-Host "> git add index.html" -ForegroundColor Cyan
 git add index.html
 
-# 6. Commit
+# 7. Commit
 if (-not $Message) {
     $Message = "deploy: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
 }
@@ -69,10 +75,10 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host $commitResult
 }
 
-# 7. Push
+# 8. Push
 Write-Host "> git push origin $Branch" -ForegroundColor Cyan
 git push origin $Branch
 
 Write-Host ""
 Write-Host "Deploy done!" -ForegroundColor Green
-Write-Host "Go to Gitee repo Settings > Pages, enable Pages (branch: $Branch)." -ForegroundColor Yellow
+Write-Host "GitHub Pages will auto-deploy from branch: $Branch" -ForegroundColor Yellow

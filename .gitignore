@@ -3,8 +3,7 @@
 # index.html
 题库.json
 
-# *deploy.conf
-*pro.txt
+# deploy.conf
 
 # Python 缓存
 __pycache__/
