@@ -1,8 +1,7 @@
-# deploy.ps1 — 一键部署到 Gitee Pages
-# 用法:
-#   .\deploy.ps1                          使用 deploy.conf 中的配置
-#   .\deploy.ps1 -Remote "git@gitee.com:user/repo.git"
-#   .\deploy.ps1 -Remote "https://gitee.com/user/repo.git" -Branch master
+# deploy.ps1 - One-click deploy to Gitee Pages
+# Usage:
+#   powershell -ExecutionPolicy Bypass -File deploy.ps1
+#   powershell -ExecutionPolicy Bypass -File deploy.ps1 -Remote "git@gitee.com:user/repo.git" -Branch master
 
 param(
     [string]$Remote = "",
@@ -14,7 +13,7 @@ $ErrorActionPreference = "Stop"
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $scriptDir
 
-# 1. 读取配置文件（如果参数未指定 Remote）
+# 1. Read config file if Remote not provided
 if (-not $Remote) {
     $confFile = Join-Path $scriptDir "deploy.conf"
     if (Test-Path $confFile) {
@@ -29,22 +28,22 @@ if (-not $Remote) {
     }
 }
 
-# 2. 验证必要参数
+# 2. Validate
 if (-not $Remote) {
-    Write-Host "请设置 Gitee 仓库地址：" -ForegroundColor Yellow
-    Write-Host "  方式1: .\deploy.ps1 -Remote 'git@gitee.com:username/repo.git'" -ForegroundColor Gray
-    Write-Host "  方式2: 在 deploy.conf 中设置 REMOTE=git@gitee.com:username/repo.git" -ForegroundColor Gray
+    Write-Host "ERROR: Remote URL not set." -ForegroundColor Red
+    Write-Host "  Option 1: .\deploy.ps1 -Remote 'git@gitee.com:username/repo.git'"
+    Write-Host "  Option 2: Set REMOTE=... in deploy.conf"
     exit 1
 }
 
-# 3. 初始化 Git（如果需要）
+# 3. Init git if needed
 $gitDir = Join-Path $scriptDir ".git"
 if (-not (Test-Path $gitDir)) {
     Write-Host "> git init" -ForegroundColor Cyan
     git init
 }
 
-# 4. 配置远程仓库
+# 4. Configure remote
 $currentRemote = (git remote get-url origin 2>$null) -replace '\s+', ''
 if ($currentRemote) {
     if ($currentRemote -ne $Remote) {
@@ -56,11 +55,11 @@ if ($currentRemote) {
     git remote add origin $Remote
 }
 
-# 5. 添加文件
+# 5. Add files
 Write-Host "> git add index.html" -ForegroundColor Cyan
 git add index.html
 
-# 6. 提交
+# 6. Commit
 if (-not $Message) {
     $Message = "deploy: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
 }
@@ -70,10 +69,10 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host $commitResult
 }
 
-# 7. 推送
+# 7. Push
 Write-Host "> git push origin $Branch" -ForegroundColor Cyan
 git push origin $Branch
 
 Write-Host ""
-Write-Host "部署完成！" -ForegroundColor Green
-Write-Host "请前往 Gitee 仓库 Settings > Pages 启用 Pages 服务（选择 $Branch 分支）。" -ForegroundColor Yellow
+Write-Host "Deploy done!" -ForegroundColor Green
+Write-Host "Go to Gitee repo Settings > Pages, enable Pages (branch: $Branch)." -ForegroundColor Yellow

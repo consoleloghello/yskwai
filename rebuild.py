@@ -255,7 +255,7 @@ html = f'''<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
-<title>题库 · 装置操作</title>
+<title>综合题库</title>
 <style>{CSS}</style>
 </head>
 <body>
