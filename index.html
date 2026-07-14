@@ -10,92 +10,125 @@ tailwind.config = {
   theme: {
     extend: {
       colors: {
-        bg: '#f0f2f5',
-        card: '#fff',
-        primary: { DEFAULT: '#2563eb', light: '#eff6ff' },
-        ink: { DEFAULT: '#1e293b', muted: '#64748b' },
-        line: '#e2e8f0',
-        ok: '#16a34a',
-        err: '#dc2626',
-        warn: '#d97706',
+        canvas: '#f7f6f3',
+        surface: '#fff',
+        ink:   { DEFAULT: '#1c1b19', muted: '#7f7b73', faint: '#a8a399' },
+        line:  '#ebe8e2',
+        primary: { DEFAULT: '#4f46e5', soft: '#eef0fb', ring: '#c7c9f5' },
+        ok:   '#15803d', okSoft: '#ecf5ef',
+        err:  '#dc2626', errSoft: '#fdeeec',
+        warn: '#b45309', warnSoft: '#fdf3e3',
       },
-      boxShadow: { soft: '0 1px 3px rgba(0,0,0,.08)' },
+      boxShadow: {
+        soft:  '0 1px 2px rgba(40,38,34,.04), 0 0 0 1px rgba(40,38,34,.03)',
+        float: '0 6px 20px -6px rgba(40,38,34,.10)',
+      },
     }
   }
 }
 </script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#f0f2f5;--card:#fff;--primary:#2563eb;--primary-light:#eff6ff;--text:#1e293b;--text2:#64748b;--border:#e2e8f0;--success:#16a34a;--error:#dc2626;--warn:#d97706;--radius:10px;--shadow:0 1px 3px rgba(0,0,0,.08)}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+:root{
+  --canvas:#f7f6f3;--surface:#fff;--line:#ebe8e2;
+  --primary:#4f46e5;--primary-soft:#eef0fb;--primary-ring:#c7c9f5;
+  --text:#1c1b19;--text2:#7f7b73;--text3:#a8a399;
+  --success:#15803d;--success-soft:#ecf5ef;
+  --error:#dc2626;--error-soft:#fdeeec;
+  --warn:#b45309;--warn-soft:#fdf3e3;
+  --border:#ebe8e2; /* 别名：JS 内联沿用 var(--border) */
+  --radius:12px;--shadow:0 1px 2px rgba(40,38,34,.04),0 0 0 1px rgba(40,38,34,.03);
+}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;-webkit-tap-highlight-color:transparent;letter-spacing:-.01em}
+input,textarea,button{font:inherit}
+:focus-visible{outline:2px solid var(--primary-ring);outline-offset:1px}
 .no-scrollbar{scrollbar-width:none;-ms-overflow-style:none}
 .no-scrollbar::-webkit-scrollbar{display:none}
 @keyframes blink{50%{opacity:.4}}
 .blink{animation:blink 1s infinite}
 
 /* —— JS 通过 classList 切换的状态，保留在 CSS 中 —— */
-#exam-overlay{display:none}
-#exam-overlay.active{display:flex}
-.score-overlay{display:none}
-.score-overlay.active{display:flex}
+#exam-overlay{display:none} #exam-overlay.active{display:flex}
+.score-overlay{display:none} .score-overlay.active{display:flex}
 .update-overlay{opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s}
 .update-overlay.active{opacity:1;visibility:visible}
-.update-card{transform:translateY(12px);transition:transform .2s}
+.update-card{transform:translateY(12px);transition:transform .2s cubic-bezier(.16,1,.3,1)}
 .update-overlay.active .update-card{transform:translateY(0)}
-.mode-toggle button.active{background:#2563eb;color:#fff;box-shadow:0 1px 3px rgba(37,99,235,.3)}
-.section-tabs button,.sub-tabs button{flex-shrink:0;padding:6px 14px;border:1px solid #e2e8f0;border-radius:16px;font-size:13px;cursor:pointer;background:#fff;color:#64748b;transition:all .15s;white-space:nowrap}
-.sub-tabs button{font-size:12px;padding:4px 12px}
-.section-tabs button.active,.sub-tabs button.active{background:#2563eb;color:#fff;border-color:#2563eb}
-.card-a{display:none;color:#16a34a;background:#f0fdf4;border-radius:8px;padding:10px 14px;margin-top:8px;font-size:14px;line-height:1.6}
+
+/* 顶部模式切换按钮：仅一个主色 lock */
+.mode-toggle button{transition:background .15s,color .15s,opacity .15s}
+.mode-toggle button.active{background:var(--primary);color:#fff;box-shadow:0 1px 3px rgba(79,70,229,.28)}
+
+/* 筛选标签 */
+.section-tabs button,.sub-tabs button{flex-shrink:0;padding:7px 14px;border:1px solid var(--line);border-radius:10px;font-size:13px;cursor:pointer;background:var(--surface);color:var(--text2);transition:all .15s;white-space:nowrap}
+.sub-tabs button{font-size:12px;padding:5px 12px}
+.section-tabs button:hover,.sub-tabs button:hover{border-color:var(--primary-ring);color:var(--text)}
+.section-tabs button.active,.sub-tabs button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+/* 卡片：去浮华、单一主色头、可 hover */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden;transition:box-shadow .18s,border-color .18s}
+.card:hover{box-shadow:0 4px 14px -6px rgba(40,38,34,.12);border-color:#dedad2}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;background:var(--primary-soft);border-bottom:1px solid rgba(79,70,229,.08)}
+.card-tag{font-size:11px;font-weight:600;color:var(--primary);padding:3px 9px;background:#fff;border:1px solid rgba(79,70,229,.16);border-radius:7px;letter-spacing:.01em}
+.card-num{font-size:11px;color:var(--text3);font-variant-numeric:tabular-nums}
+.card-body{padding:14px 15px}
+.card-q{font-size:15px;line-height:1.65;color:var(--text);margin-bottom:12px;text-wrap:pretty}
+
+/* 答案块 */
+.card-a{display:none;color:var(--success);background:var(--success-soft);border-radius:10px;padding:11px 14px;margin-top:4px;font-size:14px;line-height:1.65}
 .card-a.visible{display:block}
-.card-a .label{font-size:11px;font-weight:600;color:#16a34a;margin-bottom:4px;display:block}
-.tf-btn{flex:1;padding:14px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:18px;font-weight:700;cursor:pointer;background:#fff;transition:all .15s}
-.tf-btn:active{transform:scale(.97)}
-.tf-btn.correct{border-color:#16a34a;background:#f0fdf4;color:#16a34a}
-.tf-btn.wrong{border-color:#dc2626;background:#fef2f2;color:#dc2626}
-.exam-timer.warning{color:#dc2626;animation:blink 1s infinite}
+.card-a .label{font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--success);margin-bottom:5px;display:block;text-transform:uppercase}
+
+/* 判断题按钮 */
 .tf-btns{display:flex;gap:10px;margin-top:8px}
-.reveal-btn{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:8px 16px;border:1px solid #e2e8f0;border-radius:20px;font-size:13px;cursor:pointer;background:#fff;color:#64748b;transition:all .15s}
-.reveal-btn:active{background:#f0f2f5}
-.empty-state{text-align:center;padding:60px 20px;color:#64748b}
-.empty-state svg{width:48px;height:48px;margin-bottom:12px;opacity:.3;display:block;margin-left:auto;margin-right:auto}
-.card{background:#fff;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:10px;overflow:hidden}
-.card-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#eff6ff;border-bottom:1px solid rgba(37,99,235,.1)}
-.card-tag{font-size:11px;font-weight:600;color:#2563eb;padding:2px 8px;background:rgba(37,99,235,.1);border-radius:10px}
-.card-num{font-size:11px;color:#64748b}
-.card-body{padding:14px}
-.card-q{font-size:15px;line-height:1.6;color:#1e293b;margin-bottom:12px}
-.exam-card{background:#fff;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:12px;padding:16px}
-.exam-q-num{font-size:12px;font-weight:600;color:#2563eb;margin-bottom:8px}
-.exam-q-text{font-size:15px;line-height:1.6;margin-bottom:12px}
+.tf-btn{flex:1;padding:15px;border:1.5px solid var(--line);border-radius:12px;font-size:20px;font-weight:800;cursor:pointer;background:var(--surface);color:var(--text2);transition:all .15s}
+.tf-btn:hover{border-color:var(--primary-ring);color:var(--text)}
+.tf-btn:active{transform:scale(.97)}
+.tf-btn.correct{border-color:var(--success);background:var(--success-soft);color:var(--success)}
+.tf-btn.wrong{border-color:var(--error);background:var(--error-soft);color:var(--error)}
+
+/* “显示答案”按钮 */
+.reveal-btn{display:inline-flex;align-items:center;gap:6px;margin-top:6px;padding:8px 16px;border:1px solid var(--line);border-radius:10px;font-size:13px;cursor:pointer;background:var(--surface);color:var(--text2);transition:all .15s}
+.reveal-btn:hover{border-color:var(--primary-ring);color:var(--primary)}
+.reveal-btn:active{background:var(--canvas)}
+
+/* 考试卡片 */
+.exam-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-bottom:12px;padding:16px;box-shadow:var(--shadow)}
+.exam-q-num{font-size:12px;font-weight:600;color:var(--primary);margin-bottom:8px;letter-spacing:.01em}
+.exam-q-text{font-size:15px;line-height:1.65;margin-bottom:12px;text-wrap:pretty}
+.exam-timer.warning{color:var(--error);animation:blink 1s infinite}
+
+/* 空状态 */
+.empty-state{text-align:center;padding:72px 20px;color:var(--text2)}
+.empty-state svg{width:46px;height:46px;margin:0 auto 14px;opacity:.28;display:block}
 </style>
 </head>
-<body class="bg-bg text-ink min-h-[100dvh]">
-<div id="updateOverlay" class="update-overlay fixed inset-0 z-[400] bg-black/50 flex items-center justify-center p-5">
-<div class="update-card bg-card rounded-2xl px-6 py-6 w-full max-w-[340px] text-center">
-<div class="update-icon w-12 h-12 mx-auto mb-3.5 rounded-full bg-primary-light flex items-center justify-center text-primary">
+<body class="bg-canvas text-ink min-h-[100dvh]">
+<div id="updateOverlay" class="update-overlay fixed inset-0 z-[400] bg-black/40 backdrop-blur-[2px] flex items-center justify-center p-5">
+<div class="update-card bg-surface rounded-2xl px-6 py-6 w-full max-w-[340px] text-center shadow-float">
+<div class="update-icon w-12 h-12 mx-auto mb-3.5 rounded-full bg-primary-soft flex items-center justify-center text-primary">
 <svg class="w-[26px] h-[26px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 22h20L12 2z"/><path d="M12 9v5"/><circle cx="12" cy="18" r="0.5" fill="currentColor"/></svg>
 </div>
-<h2 class="text-[17px] font-bold mb-2.5">已有新版本</h2>
+<h2 class="text-[17px] font-bold mb-2.5 tracking-tight">已有新版本</h2>
 <p class="text-sm leading-relaxed text-ink-muted mb-2">本系统已迁移至新地址，建议前往新版本使用。</p>
 <p class="text-sm leading-relaxed text-ink-muted mb-2">新版本整合了最新版题库（外操版与内操版），登录账号还可以使用云端同步错题，云端同步笔记。</p>
-<a id="updateLink" class="update-link inline-block text-primary font-semibold text-sm no-underline px-3 py-1.5 border border-primary rounded-[18px] my-1.5 break-all active:bg-primary-light" href="https://consoleloghello.github.io/yskdocu/" target="_blank" rel="noopener">https://consoleloghello.github.io/yskdocu/</a>
+<a id="updateLink" class="update-link inline-block text-primary font-semibold text-sm no-underline px-3 py-1.5 border border-primary rounded-[10px] my-1.5 break-all transition-colors hover:bg-primary-soft active:bg-primary-soft" href="https://consoleloghello.github.io/yskdocu/" target="_blank" rel="noopener">https://consoleloghello.github.io/yskdocu/</a>
 <p class="update-note text-xs text-ink-muted mb-4"><strong>当前项目依旧可用，您可继续使用本页面。</strong></p>
-<button class="w-full py-2.5 border-none rounded-[10px] text-[15px] font-semibold cursor-pointer bg-primary text-white active:opacity-90" onclick="closeUpdate()">知道了</button>
+<button class="w-full py-2.5 border-none rounded-[12px] text-[15px] font-semibold cursor-pointer bg-primary text-white transition-all hover:opacity-90 active:scale-[.98]" onclick="closeUpdate()">知道了</button>
 </div>
 </div>
 
-<header class="sticky top-0 z-[100] bg-card border-b border-line px-3">
+<header class="sticky top-0 z-[100] bg-surface border-b border-line px-3">
 <div class="header-top flex items-center gap-2 py-2.5">
-<h1 class="text-lg font-bold whitespace-nowrap text-primary">综合题库</h1>
+<h1 class="text-[17px] font-bold whitespace-nowrap text-primary tracking-tight">综合题库</h1>
 <div class="search-wrap flex-1 relative">
-<svg class="absolute left-[11px] top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-ink-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-<input type="search" id="search" placeholder="搜索题目..." class="w-full h-10 pl-9 pr-3 border border-line rounded-full text-[15px] bg-bg outline-none transition-colors focus:border-primary">
+<svg class="absolute left-[11px] top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-ink-faint" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+<input type="search" id="search" placeholder="搜索题目..." class="w-full h-10 pl-9 pr-3 border border-line rounded-[10px] text-[15px] bg-canvas outline-none transition-colors placeholder:text-ink-faint focus:border-primary">
 </div>
-<div class="mode-toggle flex bg-bg rounded-full p-0.5 gap-0">
-<button id="btnBrowse" class="px-3.5 py-2 border-none rounded-[18px] text-[13px] font-semibold cursor-pointer bg-transparent text-ink-muted transition-all whitespace-nowrap active">浏览</button>
-<button id="btnPractice" class="px-3.5 py-2 border-none rounded-[18px] text-[13px] font-semibold cursor-pointer bg-transparent text-ink-muted transition-all whitespace-nowrap">练习</button>
-<button id="btnExam" class="ml-1 px-3.5 py-2 border-none rounded-[18px] text-[13px] font-semibold cursor-pointer bg-warn text-white transition-all whitespace-nowrap">考试</button>
+<div class="mode-toggle flex bg-canvas rounded-[12px] p-0.5 gap-0">
+<button id="btnBrowse" class="px-3.5 py-2 border-none rounded-[9px] text-[13px] font-semibold cursor-pointer bg-transparent text-ink-muted transition-all whitespace-nowrap hover:text-ink active">浏览</button>
+<button id="btnPractice" class="px-3.5 py-2 border-none rounded-[9px] text-[13px] font-semibold cursor-pointer bg-transparent text-ink-muted transition-all whitespace-nowrap hover:text-ink active">练习</button>
+<button id="btnExam" class="ml-1 px-3.5 py-2 border-none rounded-[9px] text-[13px] font-semibold cursor-pointer bg-primary text-white transition-all whitespace-nowrap hover:opacity-90 active:scale-[.98]">考试</button>
 </div>
 </div>
 </header>
@@ -106,30 +139,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;-
 <div class="info-bar flex items-center justify-between px-4 py-2.5 text-[13px] text-ink-muted"><span id="info"></span></div>
 <main id="list" class="px-2 pb-[100px]"></main>
 
-<div id="exam-overlay" class="fixed inset-0 z-[200] bg-bg flex-col overflow-y-auto">
-<div class="sticky top-0 z-10 bg-card border-b border-line px-4 py-3 flex items-center justify-between gap-2">
-<button class="btn-cancel shrink-0 px-4 py-2 text-[13px] rounded-lg bg-bg text-ink-muted border border-line" onclick="closeExam()">退出</button>
-<div><span id="examTimer" class="exam-timer text-xl font-bold text-primary tabular-nums">30:00</span></div>
-<div id="examProgress" class="text-[13px] text-ink-muted">0/0</div>
+<div id="exam-overlay" class="fixed inset-0 z-[200] bg-canvas flex-col overflow-y-auto">
+<div class="sticky top-0 z-10 bg-surface border-b border-line px-4 py-3 flex items-center justify-between gap-2">
+<button class="btn-cancel shrink-0 px-4 py-2 text-[13px] rounded-[10px] bg-canvas text-ink-muted border border-line transition-colors hover:text-ink hover:border-ink-faint" onclick="closeExam()">退出</button>
+<div><span id="examTimer" class="exam-timer text-xl font-bold text-primary tabular-nums tracking-tight">30:00</span></div>
+<div id="examProgress" class="text-[13px] text-ink-muted tabular-nums">0/0</div>
 <div class="flex gap-1.5">
-<button class="btn-cancel px-3 py-2 text-[13px] rounded-lg bg-bg text-ink-muted border border-line" onclick="examPrev()">上一题</button>
-<button class="btn-cancel px-3 py-2 text-[13px] rounded-lg bg-bg text-ink-muted border border-line" onclick="examNext()">下一题</button>
+<button class="btn-cancel px-3 py-2 text-[13px] rounded-[10px] bg-canvas text-ink-muted border border-line transition-colors hover:text-ink hover:border-ink-faint" onclick="examPrev()">上一题</button>
+<button class="btn-cancel px-3 py-2 text-[13px] rounded-[10px] bg-canvas text-ink-muted border border-line transition-colors hover:text-ink hover:border-ink-faint" onclick="examNext()">下一题</button>
 </div>
 </div>
 <div id="examBody" class="flex-1 py-3 px-2"></div>
-<div id="examFoot" class="sticky bottom-0 bg-card border-t border-line px-4 py-3 flex gap-2">
-<button class="btn-cancel flex-1 py-3 border rounded-lg text-[15px] font-semibold cursor-pointer bg-bg text-ink-muted" onclick="closeExam()">退出</button>
-<button class="btn-submit flex-1 py-3 border-none rounded-lg text-[15px] font-semibold cursor-pointer bg-primary text-white" onclick="submitExam()">交卷</button>
+<div id="examFoot" class="sticky bottom-0 bg-surface border-t border-line px-4 py-3 flex gap-2">
+<button class="btn-cancel flex-1 py-3 border rounded-[12px] text-[15px] font-semibold cursor-pointer bg-canvas text-ink-muted transition-colors hover:text-ink hover:border-ink-faint" onclick="closeExam()">退出</button>
+<button class="btn-submit flex-1 py-3 border-none rounded-[12px] text-[15px] font-semibold cursor-pointer bg-primary text-white transition-all hover:opacity-90 active:scale-[.98]" onclick="submitExam()">交卷</button>
 </div>
 </div>
 
-<div id="scoreOverlay" class="score-overlay fixed inset-0 z-[300] bg-black/50 items-center justify-center p-5">
-<div class="score-card bg-card rounded-2xl p-7 w-full max-w-[360px] text-center">
-<div class="text-xs font-semibold text-primary mb-2">模拟考试成绩</div>
-<div id="scoreNum" class="score-num text-5xl font-extrabold text-primary">0%</div>
+<div id="scoreOverlay" class="score-overlay fixed inset-0 z-[300] bg-black/40 backdrop-blur-[2px] items-center justify-center p-5">
+<div class="score-card bg-surface rounded-2xl p-7 w-full max-w-[360px] text-center shadow-float">
+<div class="text-xs font-semibold text-primary mb-2 tracking-wide">模拟考试成绩</div>
+<div id="scoreNum" class="score-num text-5xl font-extrabold text-primary tracking-tight tabular-nums">0%</div>
 <div id="scoreDetail" class="score-detail text-sm text-ink-muted mt-2 mb-5"></div>
-<button class="px-8 py-2.5 border-none rounded-full text-sm font-semibold cursor-pointer bg-primary text-white m-1" onclick="closeScore()">返回</button>
-<button class="btn-outline bg-transparent text-primary border border-primary px-8 py-2.5 rounded-full text-sm font-semibold cursor-pointer m-1" onclick="viewAnswers()">查看答案</button>
+<button class="px-8 py-2.5 border-none rounded-[12px] text-sm font-semibold cursor-pointer bg-primary text-white m-1 transition-all hover:opacity-90 active:scale-[.98]" onclick="closeScore()">返回</button>
+<button class="btn-outline bg-transparent text-primary border border-primary px-8 py-2.5 rounded-[12px] text-sm font-semibold cursor-pointer m-1 transition-colors hover:bg-primary-soft active:bg-primary-soft" onclick="viewAnswers()">查看答案</button>
 </div>
 </div>
 
